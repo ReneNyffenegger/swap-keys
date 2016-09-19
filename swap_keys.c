@@ -6,6 +6,28 @@
 
 HHOOK hook;
 
+LRESULT CALLBACK keyboardHook(int nCode, WPARAM wParam, LPARAM lParam);
+
+int main(int argc, char **argv) {
+
+    MSG messages;
+
+    hook = SetWindowsHookEx(WH_KEYBOARD_LL, keyboardHook, NULL, 0);
+
+    if (hook == NULL) {
+        printf("Error %d\n", GetLastError());
+        return 1;
+    }
+
+    printf("Waiting for messages ...\n");
+
+    while (GetMessage (&messages, NULL, 0, 0)) {
+        TranslateMessage(&messages);
+        DispatchMessage(&messages);
+    }
+    return 0;
+}
+
 LRESULT CALLBACK keyboardHook(int nCode, WPARAM wParam, LPARAM lParam) {
 
     if (nCode < 0) {
@@ -80,22 +102,3 @@ LRESULT CALLBACK keyboardHook(int nCode, WPARAM wParam, LPARAM lParam) {
     return CallNextHookEx(hook, nCode, wParam, lParam);
 }
 
-int main(int argc, char **argv) {
-
-    MSG messages;
-
-    hook = SetWindowsHookEx(WH_KEYBOARD_LL, keyboardHook, NULL, 0);
-
-    if (hook == NULL) {
-        printf("Error %d\n", GetLastError());
-        return 1;
-    }
-
-    printf("Waiting for messages ...\n");
-
-    while (GetMessage (&messages, NULL, 0, 0)) {
-        TranslateMessage(&messages);
-        DispatchMessage(&messages);
-    }
-    return 0;
-}
