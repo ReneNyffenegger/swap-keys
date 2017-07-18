@@ -2,6 +2,10 @@
 //   http://stackoverflow.com/a/27644207/180275
 //
 #include <stdio.h>
+
+#ifdef __CYGWIN__ // 2017-07-18 (tsettgchabe)
+#define _WIN32_WINNT 0x0500
+#endif
 #include <windows.h>
 
 HHOOK hook;
@@ -101,4 +105,3 @@ LRESULT CALLBACK keyboardHook(int nCode, WPARAM wParam, LPARAM lParam) {
 
     return CallNextHookEx(hook, nCode, wParam, lParam);
 }
-
