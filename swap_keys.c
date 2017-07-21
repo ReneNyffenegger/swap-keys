@@ -2,30 +2,16 @@
 //   http://stackoverflow.com/a/27644207/180275
 //
 #include <stdio.h>
+
+#ifdef __CYGWIN__ // 2017-07-18 (tsettgchabe)
+#define _WIN32_WINNT 0x0500
+#endif
 #include <windows.h>
 
 HHOOK hook;
 
-LRESULT CALLBACK keyboardHook(int nCode, WPARAM wParam, LPARAM lParam);
 
-int main(int argc, char **argv) {
 
-    MSG messages;
-
-    hook = SetWindowsHookEx(WH_KEYBOARD_LL, keyboardHook, NULL, 0);
-
-    if (hook == NULL) {
-        printf("Error %d\n", GetLastError());
-        return 1;
-    }
-
-    printf("Waiting for messages ...\n");
-
-    while (GetMessage (&messages, NULL, 0, 0)) {
-        TranslateMessage(&messages);
-        DispatchMessage(&messages);
-    }
-    return 0;
 }
 
 LRESULT CALLBACK keyboardHook(int nCode, WPARAM wParam, LPARAM lParam) {
@@ -102,3 +88,20 @@ LRESULT CALLBACK keyboardHook(int nCode, WPARAM wParam, LPARAM lParam) {
     return CallNextHookEx(hook, nCode, wParam, lParam);
 }
 
+    MSG messages;
+
+    hook = SetWindowsHookEx(WH_KEYBOARD_LL, keyboardHook, NULL, 0);
+
+    if (hook == NULL) {
+        printf("Error %d\n", GetLastError());
+        return 1;
+    }
+
+    printf("Waiting for messages ...\n");
+
+    while (GetMessage (&messages, NULL, 0, 0)) {
+        TranslateMessage(&messages);
+        DispatchMessage(&messages);
+    }
+    return 0;
+int main(int argc, char **argv) {
