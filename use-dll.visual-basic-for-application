@@ -1,0 +1,16 @@
+'
+' vim: ft=basic
+'
+' This piece of code must be inserted into a seperate module!
+'
+option explicit
+
+declare function startSwapKeys lib "swap_keys.dll" () as integer
+
+sub main()
+
+' msgBox ("in VBA main")
+  
+  msgBox (startSwapKeys)
+
+end sub
