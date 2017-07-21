@@ -1,0 +1,5 @@
+*.swp
+swap_keys_generated.def
+swap_keys.o
+swap_keys.exe
+swap_keys.dll
