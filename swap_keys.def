@@ -1,0 +1,3 @@
+EXPORTS
+    startSwapKeys@0 @1
+    startSwapKeys = startSwapKeys@0
