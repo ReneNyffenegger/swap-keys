@@ -4,15 +4,32 @@
 #include <stdio.h>
 
 #ifdef __CYGWIN__ // 2017-07-18 (tsettgchabe)
+// #define _WIN32_WINNT 0x0404
 #define _WIN32_WINNT 0x0500
 #endif
 #include <windows.h>
 
 HHOOK hook;
 
+#ifdef AS_DLL
 
+int i = 0;
 
+BOOL WINAPI DllMain (
+    HINSTANCE hInstDLL,
+    DWORD     fdwReason,
+    LPVOID    lpvReserved
+
+) {
+
+//  Oh, wy are such things even necessary and what can
+//  be done to change it.
+  if (! i++) {
+    MessageBox(0, "DllMain", "Swap keys", 0);
+  }
 }
+
+#endif
 
 LRESULT CALLBACK keyboardHook(int nCode, WPARAM wParam, LPARAM lParam) {
 
@@ -88,6 +105,15 @@ LRESULT CALLBACK keyboardHook(int nCode, WPARAM wParam, LPARAM lParam) {
     return CallNextHookEx(hook, nCode, wParam, lParam);
 }
 
+#ifdef AS_DLL
+__declspec(dllexport) 
+#endif
+int
+#ifdef AS_DLL
+__stdcall
+#endif
+startSwapKeys() {
+
     MSG messages;
 
     hook = SetWindowsHookEx(WH_KEYBOARD_LL, keyboardHook, NULL, 0);
@@ -97,11 +123,22 @@ LRESULT CALLBACK keyboardHook(int nCode, WPARAM wParam, LPARAM lParam) {
         return 1;
     }
 
+#ifndef AS_DLL
+
     printf("Waiting for messages ...\n");
 
     while (GetMessage (&messages, NULL, 0, 0)) {
         TranslateMessage(&messages);
         DispatchMessage(&messages);
     }
+
+#endif
     return 0;
+
+}
+
+#ifndef AS_DLL
 int main(int argc, char **argv) {
+    return startSwapKeys();
+}
+#endif
