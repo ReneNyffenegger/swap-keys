@@ -106,6 +106,7 @@ LRESULT CALLBACK keyboardHook(int nCode, WPARAM wParam, LPARAM lParam) {
 }
 
 #ifdef AS_DLL
+extern // 2017-07-21 - tsettchabe / CYGWIN
 __declspec(dllexport) 
 #endif
 int
