@@ -33,14 +33,6 @@ BOOL WINAPI DllMain (
 
 LRESULT CALLBACK keyboardHook(int nCode, WPARAM wParam, LPARAM lParam) {
 
-    if (nCode < 0) {
-    // nCode: A code the hook procedure uses to determine how to process the message.
-    // If nCode is less than zero, the hook procedure must pass the message to
-    // the CallNextHookEx function without further processing and should return
-    // the value returned by CallNextHookEx.
-      return CallNextHookEx(hook, nCode, wParam, lParam);
-    }
-
     KBDLLHOOKSTRUCT *p = (KBDLLHOOKSTRUCT *) lParam;
   
     DWORD newVkCode;
@@ -49,6 +41,15 @@ LRESULT CALLBACK keyboardHook(int nCode, WPARAM wParam, LPARAM lParam) {
 
     char wParamStr[11];
     char vkStr    [10] = "";
+
+    if (nCode < 0) {
+    // nCode: A code the hook procedure uses to determine how to process the message.
+    // If nCode is less than zero, the hook procedure must pass the message to
+    // the CallNextHookEx function without further processing and should return
+    // the value returned by CallNextHookEx.
+      return CallNextHookEx(hook, nCode, wParam, lParam);
+    }
+
 
     if      (wParam == WM_KEYDOWN)    strcpy(wParamStr, "KEYDOWN");
     else if (wParam == WM_KEYUP)      strcpy(wParamStr, "KEYUP");
