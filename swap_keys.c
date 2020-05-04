@@ -43,13 +43,16 @@ LRESULT CALLBACK keyboardHook(int nCode, WPARAM wParam, LPARAM lParam) {
     char vkStr    [10] = "";
 
     if (nCode < 0) {
-    // nCode: A code the hook procedure uses to determine how to process the message.
-    // If nCode is less than zero, the hook procedure must pass the message to
-    // the CallNextHookEx function without further processing and should return
-    // the value returned by CallNextHookEx.
-      return CallNextHookEx(hook, nCode, wParam, lParam);
+     //
+     // nCode: A code the hook procedure uses to determine how to process the message.
+     // If nCode is less than zero, the hook procedure must pass the message to
+     // the CallNextHookEx function without further processing and should return
+     // the value returned by CallNextHookEx.
+     //
+        return CallNextHookEx(hook, nCode, wParam, lParam);
     }
 
+#ifdef SHOW_INFO
 
     if      (wParam == WM_KEYDOWN)    strcpy(wParamStr, "KEYDOWN");
     else if (wParam == WM_KEYUP)      strcpy(wParamStr, "KEYUP");
@@ -70,7 +73,21 @@ LRESULT CALLBACK keyboardHook(int nCode, WPARAM wParam, LPARAM lParam) {
     else if (p->vkCode == 226) strcpy(vkStr, "<R-SHIFT>");
     else vkStr[0] = p->vkCode;
 
-    printf(" %-10s - %3lu | %9s | %3d - %lu\n", wParamStr, p->vkCode, vkStr, p->scanCode, p->time);
+    char wndTitle[256];
+    HWND hwnd=GetForegroundWindow();
+    GetWindowText(hwnd, wndTitle, sizeof(wndTitle));
+
+    WINDOWPLACEMENT wp;
+    wp.length = sizeof(wp);
+
+    GetWindowPlacement(hwnd, &wp);
+    char* showCmd;
+    if (wp.showCmd == SW_MAXIMIZE) { showCmd = "    SW_MAXIMIZE"; }
+    else                           { showCmd = "not SW_MAXIMIZE"; }
+
+    printf(" %-10s - %3lu | %9s | %3d - %lu | %-30s %s\n", wParamStr, p->vkCode, vkStr, p->scanCode, p->time, wndTitle, showCmd);
+
+#endif
 
     inputs[0].type           = INPUT_KEYBOARD;
     inputs[0].ki.wScan       = 0;
