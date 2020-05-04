@@ -34,7 +34,7 @@ BOOL WINAPI DllMain (
 LRESULT CALLBACK keyboardHook(int nCode, WPARAM wParam, LPARAM lParam) {
 
     KBDLLHOOKSTRUCT *p = (KBDLLHOOKSTRUCT *) lParam;
-  
+
     DWORD newVkCode;
     INPUT inputs[1];
     UINT ret;
@@ -100,23 +100,27 @@ LRESULT CALLBACK keyboardHook(int nCode, WPARAM wParam, LPARAM lParam) {
     }
 
     if ((p->flags & LLKHF_INJECTED) == 0) {
-
-      if (p->vkCode == 27) { // ESC -> CAPSLCK
-          inputs[0].ki.wVk = 20;
-          ret = SendInput(1, inputs, sizeof (INPUT));
-          return 1;
-      }
-      if (p->vkCode == 20) { // CAPSLCK -> ESC
-          inputs[0].ki.wVk = 27;
-          ret = SendInput(1, inputs, sizeof (INPUT));
-          return 1;
-      }
-      if (p->vkCode == 165) { // Right Alt -> Right Ctrl
-          inputs[0].ki.wVk = 163;
-          ret = SendInput(1, inputs, sizeof (INPUT));
-          return 1;
-      }
-
+     //
+     // If the LLKHF_INJECTED (= 0x10) bit is set, the event was injected.
+     //
+     // With the previous test, we skip over injected events and only
+     // change «original» events.
+     //
+        if (p->vkCode == VK_ESCAPE) {                    // ESC (27) -> CAPS LOCK (20)
+            inputs[0].ki.wVk = VK_CAPITAL;
+            ret = SendInput(1, inputs, sizeof (INPUT));
+            return 1;
+        }
+        if (p->vkCode == VK_CAPITAL) {                   // CAPS LOCK (20) -> ESC (27)
+            inputs[0].ki.wVk = VK_ESCAPE;
+            ret = SendInput(1, inputs, sizeof (INPUT));
+            return 1;
+        }
+        if (p->vkCode == VK_RMENU) {                     // Right Alt (165) -> Right Ctrl (163)
+            inputs[0].ki.wVk = VK_RCONTROL;
+            ret = SendInput(1, inputs, sizeof (INPUT));
+            return 1;
+        }
     }
 
 
@@ -125,7 +129,7 @@ LRESULT CALLBACK keyboardHook(int nCode, WPARAM wParam, LPARAM lParam) {
 
 #ifdef AS_DLL
 extern // 2017-07-21 - tsettchabe / CYGWIN
-__declspec(dllexport) 
+__declspec(dllexport)
 #endif
 int
 #ifdef AS_DLL
