@@ -142,7 +142,7 @@ startSwapKeys() {
     hook = SetWindowsHookEx(WH_KEYBOARD_LL, keyboardHook, NULL, 0);
 
     if (hook == NULL) {
-        printf("Error %d\n", GetLastError());
+        printf("Error %lu\n", GetLastError());
         return 1;
     }
 
