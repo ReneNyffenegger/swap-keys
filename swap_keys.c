@@ -85,7 +85,7 @@ LRESULT CALLBACK keyboardHook(int nCode, WPARAM wParam, LPARAM lParam) {
     if (wp.showCmd == SW_MAXIMIZE) { showCmd = "    SW_MAXIMIZE"; }
     else                           { showCmd = "not SW_MAXIMIZE"; }
 
-    printf(" %-10s - %3lu | %9s | %3d - %lu | %-30s %s\n", wParamStr, p->vkCode, vkStr, p->scanCode, p->time, wndTitle, showCmd);
+    printf(" %-10s - %3lu | %9s | %3lu - %lu | %-30s %s\n", wParamStr, p->vkCode, vkStr, p->scanCode, p->time, wndTitle, showCmd);
 
 #endif
 
