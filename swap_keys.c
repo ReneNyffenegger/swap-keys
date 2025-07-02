@@ -65,6 +65,9 @@ LRESULT CALLBACK keyboardHook(int nCode, WPARAM wParam, LPARAM lParam) {
     else if (p->vkCode ==  13) vkStr = "<CR>"     ;
     else if (p->vkCode ==  20) vkStr = "<CAPSLCK>";
     else if (p->vkCode ==  27) vkStr = "<ESC>"    ;
+    else if (p->vkCode ==  91) vkStr = "<L-WIN>"  ;
+    else if (p->vkCode ==  92) vkStr = "<R-WIN>"  ;
+    else if (p->vkCode ==  93) vkStr = "<APPS>"   ;
     else if (p->vkCode == 161) vkStr = "<L-SHIFT>";
     else if (p->vkCode == 162) vkStr = "<L-CTRL>" ;
     else if (p->vkCode == 163) vkStr = "<R-CTRL>" ;
@@ -85,7 +88,7 @@ LRESULT CALLBACK keyboardHook(int nCode, WPARAM wParam, LPARAM lParam) {
     if (wp.showCmd == SW_MAXIMIZE) { showCmd = "    SW_MAXIMIZE"; }
     else                           { showCmd = "not SW_MAXIMIZE"; }
 
-    printf(" %-10s - %3lu | %9s | %3lu - %lu | %-30s %s\n", wParamStr, p->vkCode, vkStr, p->scanCode, p->time, wndTitle, showCmd);
+    printf(" %-10s - %3lu | %-9s | %3lu - %lu | %-30s %s\n", wParamStr, p->vkCode, vkStr, p->scanCode, p->time, wndTitle, showCmd);
 
 #endif
 
