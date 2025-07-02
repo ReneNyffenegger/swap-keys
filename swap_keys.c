@@ -39,8 +39,8 @@ LRESULT CALLBACK keyboardHook(int nCode, WPARAM wParam, LPARAM lParam) {
     INPUT inputs[1];
     UINT ret;
 
-    char wParamStr[11];
-    char vkStr    [10] = "";
+    char  wParamStr[11];
+    char *vkStr;
 
     if (nCode < 0) {
      //
@@ -60,18 +60,18 @@ LRESULT CALLBACK keyboardHook(int nCode, WPARAM wParam, LPARAM lParam) {
     else if (wParam == WM_SYSKEYUP)   strcpy(wParamStr, "SYSKEYUP");
     else                              strcpy(wParamStr, "UNKNOWN");
 
-    if      (p->vkCode ==   9) strcpy(vkStr, "<TAB>"    );
-    else if (p->vkCode ==  10) strcpy(vkStr, "<LF>"     );
-    else if (p->vkCode ==  13) strcpy(vkStr, "<CR>"     );
-    else if (p->vkCode ==  20) strcpy(vkStr, "<CAPSLCK>");
-    else if (p->vkCode ==  27) strcpy(vkStr, "<ESC>"    );
-    else if (p->vkCode == 161) strcpy(vkStr, "<L-SHIFT>");
-    else if (p->vkCode == 162) strcpy(vkStr, "<L-CTRL>" );
-    else if (p->vkCode == 163) strcpy(vkStr, "<R-CTRL>" );
-    else if (p->vkCode == 164) strcpy(vkStr, "<L-ALT>"  );
-    else if (p->vkCode == 165) strcpy(vkStr, "<R-ALT>"  );
-    else if (p->vkCode == 226) strcpy(vkStr, "<R-SHIFT>");
-    else vkStr[0] = p->vkCode;
+    if      (p->vkCode ==   9) vkStr = "<TAB>"    ;
+    else if (p->vkCode ==  10) vkStr = "<LF>"     ;
+    else if (p->vkCode ==  13) vkStr = "<CR>"     ;
+    else if (p->vkCode ==  20) vkStr = "<CAPSLCK>";
+    else if (p->vkCode ==  27) vkStr = "<ESC>"    ;
+    else if (p->vkCode == 161) vkStr = "<L-SHIFT>";
+    else if (p->vkCode == 162) vkStr = "<L-CTRL>" ;
+    else if (p->vkCode == 163) vkStr = "<R-CTRL>" ;
+    else if (p->vkCode == 164) vkStr = "<L-ALT>"  ;
+    else if (p->vkCode == 165) vkStr = "<R-ALT>"  ;
+    else if (p->vkCode == 226) vkStr = "<R-SHIFT>";
+    else vkStr = "";
 
     char wndTitle[256];
     HWND hwnd=GetForegroundWindow();
